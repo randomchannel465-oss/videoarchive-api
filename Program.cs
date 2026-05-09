@@ -12,7 +12,12 @@ var app = builder.Build();
 
 app.UseSwagger();
 
-app.UseSwaggerUI();
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint(
+        "/swagger/v1/swagger.json",
+        "VideoArchive API V1");
+});
 
 string root =
     Path.Combine(
