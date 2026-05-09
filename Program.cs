@@ -3,22 +3,35 @@ using Microsoft.Extensions.FileProviders;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
+
 builder.Services.AddEndpointsApiExplorer();
+
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
 app.UseSwagger();
+
 app.UseSwaggerUI();
 
-app.UseHttpsRedirection();
+string root =
+    Path.Combine(
+        Directory.GetCurrentDirectory(),
+        "wwwroot");
+
+Directory.CreateDirectory(root);
+
+Directory.CreateDirectory(
+    Path.Combine(root, "Videos"));
+
+Directory.CreateDirectory(
+    Path.Combine(root, "Thumbnails"));
 
 app.UseStaticFiles(new StaticFileOptions
 {
-    FileProvider = new PhysicalFileProvider(
-        Path.Combine(
-            Directory.GetCurrentDirectory(),
-            "wwwroot")),
+    FileProvider =
+        new PhysicalFileProvider(root),
+
     RequestPath = ""
 });
 
