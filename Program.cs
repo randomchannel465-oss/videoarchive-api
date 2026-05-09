@@ -1,3 +1,4 @@
+using Microsoft.OpenApi.Models;
 using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -6,17 +7,32 @@ builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
 
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc(
+        "v1",
+        new OpenApiInfo
+        {
+            Title = "VideoArchive API",
+            Version = "v1"
+        });
+});
 
 var app = builder.Build();
 
-app.UseSwagger();
+app.UseSwagger(c =>
+{
+    c.RouteTemplate =
+        "swagger/{documentName}/swagger.json";
+});
 
 app.UseSwaggerUI(c =>
 {
     c.SwaggerEndpoint(
         "/swagger/v1/swagger.json",
         "VideoArchive API V1");
+
+    c.RoutePrefix = "swagger";
 });
 
 string root =
